@@ -186,7 +186,7 @@
 <p>IE盒子宽高 =  content + padding + border </p>
 <img src="https://i.loli.net/2020/07/13/mCh8SvVsKfIAg7P.png" srcset="/img/loading.gif" alt="img" style="zoom: 67%;" />
 
-<img src="https://i.loli.net/2020/07/13/mCh8SvVsKfIAg7P.png" srcset="/img/loading.gif" style="zoom:67%;" />
+<img src="https://i.loli.net/2020/07/13/xbipVngTRCoDYwc.png" srcset="/img/loading.gif" alt="img" style="zoom:67%;" />
 
 <pre><code class="hljs css">//设置标准盒子，默认
 <span class="hljs-selector-tag">box-sizing</span>: <span class="hljs-selector-tag">content-box</span>;
@@ -209,7 +209,7 @@ dom.getBoundingClientRect().width/height/left/top;</code></pre>
 <h2 id="四、BFC-IFC"><a href="#四、BFC-IFC" class="headerlink" title="四、BFC/IFC"></a>四、BFC/IFC</h2><p>1、前置概念：</p>
 <ol>
 <li><p>Box: 布局的基本单位，元素类型和 display 属性，决定 Box 的类型。不同类型的 Box， 会参与不同的 Formatting Context（一个决定如何渲染文档的容器），因此 Box 内的元素会以不同的方式渲染。</p>
-<p>block-level box: display 属性为 block, list-item, table 的元素，会生成 block-level box。并且参与 block fomatting context；</p>
+<p>block-level box: display 属性为 block, list-item, table 的元素，会生成 block-level box。并且参与 block formatting context；</p>
 <p>inline-level box: display 属性为 inline, inline-block, inline-table 的元素，会生成 inline-level box。并且参与 inline formatting context。</p>
 </li>
 <li><p>Formatting Context：这个概念规定了页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。</p>
@@ -222,17 +222,46 @@ dom.getBoundingClientRect().width/height/left/top;</code></pre>
 <li>BFC：</li>
 </ol>
 <ul>
-<li>布局规则：<ul>
-<li>内部的Box会在垂直方向一个接一个放置。</li>
-<li>Box垂直方向的距离由margin决定。属于同一个 BFC 的两个相邻 Box 的 margin 会发生重叠。</li>
-<li>每个盒子（块盒与行盒）的margin box的左边，与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。</li>
+<li><p>布局规则：</p>
+<ul>
+<li>内部的Box会在垂直方向一个个放置，盒子之间垂直的间距是由 margin 决定。</li>
+<li>在同一个 BFC 中，两个相邻的块级盒子的垂直外边距会发生重叠。</li>
 <li>BFC的区域不会与float box重叠。</li>
-<li>BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。</li>
+<li>BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。</li>
 <li>计算BFC的高度时，浮动元素也参与计算。</li>
 </ul>
 </li>
+<li><p>创建BFC：</p>
+<ul>
+<li>float的值不是none。</li>
+<li>position的值不是static或者relative。</li>
+<li>overflow的值不是visible。</li>
+<li>display的值是inline-block、table-cell、flex、table-caption或者inline-flex。</li>
 </ul>
-
+</li>
+<li><p>作用：</p>
+<ul>
+<li>利用BFC避免margin重叠。</li>
+<li>自适应两栏布局。</li>
+<li>清除浮动。</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>IFC：</li>
+</ol>
+<ul>
+<li>布局规则：<ul>
+<li>内部的盒子会在水平方向，一个个地放置。</li>
+<li>IFC的高度，由里面最高盒子的高度决定。</li>
+<li>当一行不够放置的时候会自动切换到下一行。</li>
+</ul>
+</li>
+</ul>
+<h2 id="五、参考"><a href="#五、参考" class="headerlink" title="五、参考"></a>五、参考</h2><p><a href="https://segmentfault.com/a/1190000013647777" target="_blank" rel="noopener">https://segmentfault.com/a/1190000013647777</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context</a></p>
+<p><a href="https://segmentfault.com/a/1190000013664630" target="_blank" rel="noopener">https://segmentfault.com/a/1190000013664630</a></p>
+<img src="https://i.loli.net/2020/07/13/c8AxMR4S6mpi7bq.png" srcset="/img/loading.gif" alt="display_float_position" style="zoom:80%;" />
             </article>
             <hr>
             <div>
