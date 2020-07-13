@@ -275,8 +275,43 @@ div1.addEventListener(<span class="hljs-string">'drag'</span>, throttle( <span c
 <span class="hljs-keyword">const</span> input1 = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'input1'</span>)
 input1.addEventListener(<span class="hljs-string">'keyup'</span>, debounce(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;
   <span class="hljs-built_in">console</span>.log(input1.value)
-&#125;))</code></pre></li>
+&#125;))</code></pre>
+
+</li>
 </ol>
+<h2 id="三、补充"><a href="#三、补充" class="headerlink" title="三、补充"></a>三、补充</h2><ol>
+<li><p>DNS 预解析：使浏览器主动去执行域名解析。</p>
+<pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"dns-prefetch"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"//example.com"</span>&gt;</span></code></pre>
+</li>
+<li><p>HTTP预连接：</p>
+<p>解释href的属性值，如果是合法的URL，然后继续判断URL的协议是否是http或者https否则就结束处理。</p>
+<p>如果当前页面host不同于href属性中的host，crossorigin其实被设置为anonymous(就是不带cookie了)，如果希望带上cookie等信息可以加上crossorign属性，corssorign就等同于设置为use-credentials</p>
+<pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"preconnect"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"//example.com"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"preconnect"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"//cdn.example.com"</span> <span class="hljs-attr">crossorigin</span>&gt;</span></code></pre>
+</li>
+<li><p>预加载资源：让浏览器预加载一个资源（HTML，JS，CSS或者图片等），但页面是不会解析或者JS是不会直接执行的。</p>
+<pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"prefetch"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"//example.com/next-page.html"</span> <span class="hljs-attr">as</span>=<span class="hljs-string">"html"</span> <span class="hljs-attr">crossorigin</span>=<span class="hljs-string">"use-credentials"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"prefetch"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/library.js"</span> <span class="hljs-attr">as</span>=<span class="hljs-string">"script"</span>&gt;</span></code></pre>
+</li>
+<li><p>预渲染：不仅会加载资源，还会解执行页面，进行预渲染，但是这都是根据浏览器自身进行判断。</p>
+<ul>
+<li>分配少量资源对页面进行预渲染。</li>
+</ul>
+<ul>
+<li>挂起部分请求直至页面可见时。</li>
+<li>可能会放弃预渲染，如果消耗资源过多。</li>
+</ul>
+<pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"prerender"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"//example.com/next-page.html"</span>&gt;</span></code></pre>
+</li>
+<li></li>
+<li><p>pr属性：</p>
+<p>dns-prefetch，preconnect，prefetch和prerender都支持一个pr属性（0.0到1.0范围的值），让浏览器能够判断优先加载哪些资源。浏览器内部是有可用的连接池的，资源紧张的情况下只能加载优先级更高的资源。</p>
+</li>
+</ol>
+<p>参考：</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/CORS_settings_attributes" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/HTML/CORS_settings_attributes</a></p>
+<p><a href="https://segmentfault.com/a/1190000011065339" target="_blank" rel="noopener">https://segmentfault.com/a/1190000011065339</a></p>
+<p><a href="https://github.com/joshbuchea/HEAD" target="_blank" rel="noopener">https://github.com/joshbuchea/HEAD</a></p>
 
             </article>
             <hr>
