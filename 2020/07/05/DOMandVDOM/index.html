@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lyanm Zhong">
+  <meta name="keywords" content="">
+  <title>对DOM和Virtual DOM的理解 - Lyanm</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lyanm's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+                对DOM和Virtual DOM的理解
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-07-05 10:01">
+      July 5, 2020 am
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="对DOM和Virtual-DOM的理解"><a href="#对DOM和Virtual-DOM的理解" class="headerlink" title="对DOM和Virtual DOM的理解"></a>对DOM和Virtual DOM的理解</h1><h2 id="一、DOM"><a href="#一、DOM" class="headerlink" title="一、DOM"></a>一、DOM</h2><h3 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h3><p>MDN：文档对象模型 (DOM) 是HTML和XML文档的编程接口。它提供了对文档的结构化的表述，并定义了一种方式可以使从程序中对该结构进行访问，从而改变文档的结构，样式和内容。DOM 将文档解析为一个由节点和对象（包含属性和方法的对象）组成的结构集合。简言之，它会将web页面和脚本或程序语言连接起来。</p>
+<p>理解：DOM就是对文档（HTML/XML）操作的接口。在DOM的概念里，将文档各种节点抽象成了一颗节点树（根节点是document），可以用各种接口对这颗树进行修改，从而改变文档所展示出来的结果。并不是说DOM是一颗节点树（DOM 是HTML和XML文档的编程接口），而是因为这些接口的存在，才把文档构建成了一颗树。</p>
+<h3 id="2-DOM和JS的关系"><a href="#2-DOM和JS的关系" class="headerlink" title="2. DOM和JS的关系"></a>2. DOM和JS的关系</h3><ul>
+<li><p>区别：DOM 跟编程语言（ JS 等等）是互相独立的，DOM译为文档对象模型，只是一种模型、结构，很多语言都能使用。</p>
+</li>
+<li><p>联系：DOM + JS 能组成一个web页面。</p>
+</li>
+</ul>
+<h3 id="3-节点和节点树"><a href="#3-节点和节点树" class="headerlink" title="3. 节点和节点树"></a>3. 节点和节点树</h3><ol>
+<li><p>DOM 的最小组成单位叫做节点（Node）。节点树/DOM树 就是由节点组成的。浏览器提供一个原生节点对象 Node ，所有的节点都继承自这个对象，拥有一些共同的属性和方法，这是 DOM 操作的基础。</p>
+</li>
+<li><p>注意区分 文档节点 和 文档元素 ：在HTML中，文档节点一般就是指根节点document，而文档元素就是指&lt;html&gt;元素，每个文档都只能有一个文档元素。</p>
+</li>
+<li><p>在HTML中，Node有7种类型：</p>
+</li>
+</ol>
+<ul>
+<li><code>Document</code>：整个文档树的顶层节点</li>
+<li><code>DocumentType</code>：<code>doctype</code>标签（比如<code>&lt;!DOCTYPE html&gt;</code>）</li>
+<li><code>Element</code>：网页的各种HTML标签（比如<code>&lt;body&gt;</code>、<code>&lt;a&gt;</code>等）</li>
+<li><code>Attr</code>：网页元素的属性（比如<code>class=&quot;right&quot;</code>）</li>
+<li><code>Text</code>：标签之间或标签包含的文本</li>
+<li><code>Comment</code>：注释</li>
+<li><code>DocumentFragment</code>：文档的片段</li>
+</ul>
+<ol start="4">
+<li>Node原型上定义了许多的方法和属性，document节点也是继承自Node的，所以才能这样使用 document.querySelector 方法等等，还有获取 document.getElementsByTagName(‘html’)[0].nodeType 属性等等。</li>
+<li>说白了就是用接口提供的Node对象上的方法和属性来修改和查看DOM树，来对页面修改。</li>
+</ol>
+<h3 id="4-参考"><a href="#4-参考" class="headerlink" title="4.参考"></a>4.参考</h3><p><a href="http://luopq.com/2015/11/30/javascript-dom/" target="_blank" rel="noopener">http://luopq.com/2015/11/30/javascript-dom/</a></p>
+<p><a href="https://wangdoc.com/javascript/dom/general.html" target="_blank" rel="noopener">https://wangdoc.com/javascript/dom/general.html</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Document_Object_Model/Introduction" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/API/Document_Object_Model/Introduction</a></p>
+<p>《JavaScript高级程序设计》（点击查看大图）</p>
+<img src="https://i.loli.net/2020/07/05/a8vh347gnFr1BCf.png" srcset="/img/loading.gif" alt="image-20200705103854234" style="zoom:25%;" />
+
+<img src="https://i.loli.net/2020/07/05/iPYFSqKMwGOJQng.png" srcset="/img/loading.gif" alt="image-20200705103747825" style="zoom: 25%;" />
+
+<h2 id="二、Virtual-DOM"><a href="#二、Virtual-DOM" class="headerlink" title="二、Virtual DOM"></a>二、Virtual DOM</h2><h3 id="1-概念-1"><a href="#1-概念-1" class="headerlink" title="1. 概念"></a>1. 概念</h3><p>用 JS 模拟 DOM 结构，将 DOM 变化的对比放在 JS 层来做，实际上VDOM就是 JS 对象。</p>
+<p>使用Virtual DOM ：render Virtual DOM + diff <strong>O(template size)</strong> + 必要的 DOM 更新 <strong>O(DOM change)</strong></p>
+<h3 id="2-为什么要用Virtual-DOM"><a href="#2-为什么要用Virtual-DOM" class="headerlink" title="2. 为什么要用Virtual DOM"></a>2. 为什么要用Virtual DOM</h3><ul>
+<li>性能上直接操作真实 DOM 代价高</li>
+<li>在框架中使用 VDOM 可以为你掩盖底层的 DOM 操作，让你用更声明式的方式来描述你的目的，从而让你的代码更容易维护。</li>
+</ul>
+<h3 id="3-diff算法"><a href="#3-diff算法" class="headerlink" title="3. diff算法"></a>3. diff算法</h3><ul>
+<li><p>最早用于解决LCS（最长公共子串）问题，找出两个序列之间的公共子序列。</p>
+</li>
+<li><p>在VDOM中使用传统diff算法，会跨级对比两个树之间的不同，时间复杂度为O(n<sup>3</sup>)。</p>
+</li>
+<li><p>在Vue中，diff 优化后只比较树的同层级，为O(n)。</p>
+<p>实现方式：（这里只演示diff算法，具体的 VDOM 是如何更新的不演示）（在 diff 比较过程中，循环从两边向中间收拢）</p>
+<p>1）首先列出新老节点比较的可能情况：</p>
+<ul>
+<li>当新老 VNode 节点的 start 满足 sameVnode 时，直接 patchVnode 即可，同时新老 VNode 节点的开始索引都加 1。</li>
+<li>当新老 VNode 节点的 end 满足 sameVnode 时，同样直接 patchVnode 即可，同时新老 VNode 节点的结束索引都减 1。</li>
+<li>当老 VNode 节点的 <u>start</u> 和新 VNode 节点的 <u>end</u> 满足 sameVnode 时，说明这次数据更新后 oldStartVnode 到了 oldEndVnode <u>后面</u>了。这时候在 patchVnode 后，还需要将当前真实 dom 节点移动到 oldEndVnode 的<u>后面</u>，同时老 VNode 节点开始索引<u>加 1</u>，新 VNode 节点的结束索引<u>减 1</u>。</li>
+<li>当老 VNode 节点的 <u>end</u> 和新 VNode 节点的 <u>start</u> 满足 sameVnode 时，这说明这次数据更新后 oldEndVnode 到了 oldStartVnode <u>前面</u>了。这时候在 patchVnode 后，还需要将当前真实 dom 节点移动到 oldStartVnode 的<u>前面</u>，同时老 VNode 节点结束索引<u>减 1</u>，新 VNode 节点的开始索引<u>加 1</u>。</li>
+<li>如果都不满足以上四种情形，那说明没有相同的节点可以复用。这时候就找与newStartVnode 一致 <code>:key</code> 的旧的 VNode 节点，如果两者满足 sameVnode ，在进行 patchVnode 的同时会将这个真实 dom 移动到 oldStartVnode 对应的真实 dom 的前面；如果没有找到，就无法进行节点的复用，只能调用 createElm 创建一个新的 dom 节点放到当前 newStartIdx 的位置。</li>
+</ul>
+<p>2）流程：</p>
+<p>1、初始化：</p>
+<img src="https://i.loli.net/2020/07/05/qKMmwChP9iHljBb.png" srcset="/img/loading.gif" alt="Vue的diff算法解析" style="zoom: 50%;" />
+
+<p>2、第一次循环：找到 旧节点末尾 和 新节点开头 (都是 D) 相同，复用 D 节点即可。同时旧节点的 endIndex 移动到了 C，新节点的 startIndex 移动到了 C。</p>
+<img src="https://i.loli.net/2020/07/05/Yoc5FAqERtudwnI.png" srcset="/img/loading.gif" alt="Vue的diff算法解析" style="zoom: 50%;" />
+
+<p>3、第二次循环：同样是 旧节点末尾 和 新节点开头 (都是 C) 相同，于是创建 C 节点，插到D节点后。同时旧节点的 endIndex 移动到了 B，新节点的 startIndex 移动到了 E。（为什么第一次是复用，第二次是创建了？因为 old 序列队尾就是D直接复用即可）</p>
+<img src="https://i.loli.net/2020/07/05/J2IpECfNtbUgmZL.png" srcset="/img/loading.gif" alt="Vue的diff算法解析" style="zoom:50%;" />
+
+<p>4、第三次循环：发现 patchVnode 的 4 种情形都不符合，于是在旧节点队列中查找当前的新节点 E，不存在，只能创建新的节点 E，插入到 C 节点后。同时新节点的 startIndex 移动到了 A。旧节点的 startIndex 和 endIndex 都保持不动。</p>
+<img src="https://i.loli.net/2020/07/05/ROTXd9Fl5uM8bHj.png" srcset="/img/loading.gif" alt="Vue的diff算法解析" style="zoom: 50%;" />
+
+<p>5、第四次循环：新旧节点的开头 (都是 A) 相同，于是创建 A 节点，插入到 E 节点后面。同时旧节点的 startIndex 移动到了 B，新节点的 startIndex 移动到了 B。</p>
+<img src="https://i.loli.net/2020/07/05/T8b1y3QdwMEuCO6.png" srcset="/img/loading.gif" alt="Vue的diff算法解析" style="zoom:50%;" />
+
+<p>6、第五次循环：同第四次循环，创建 B 节点插入到 A 节点后面。同时旧节点的 startIndex 移动到了 C，新节点的 startIndex 移动到了 F。这时候发现新节点的 startIndex 已经大于 endIndex 了。不再满足循环的条件了，因此结束循环。</p>
+<img src="https://i.loli.net/2020/07/05/iFwarlM67Pf9vLA.png" srcset="/img/loading.gif" alt="Vue的diff算法解析" style="zoom:50%;" />
+
+<p>7、循环结束后，若 新节点数 大于 老节点数 则需要创建多出来的节点加入到队列中，反之删除。至此整个 diff 过程就已经全部完成了。在本例中，新节点数大于旧节点数，需要创建 newStartIdx 和 newEndIdx 之间的所有节点。在实例中就是 F 节点，因此创建 F 节点加入到 B 节点后即可。</p>
+<img src="https://i.loli.net/2020/07/05/ouLQk1bpJKl7G8N.png" srcset="/img/loading.gif" alt="Vue的diff算法解析" style="zoom:50%;" />
+
+</li>
+</ul>
+<h3 id="4-参考-1"><a href="#4-参考-1" class="headerlink" title="4. 参考"></a>4. 参考</h3><p><a href="https://en.wikipedia.org/wiki/Diff" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Diff</a></p>
+<p><a href="https://github.com/snabbdom/snabbdom" target="_blank" rel="noopener">https://github.com/snabbdom/snabbdom</a></p>
+<p><a href="https://www.zhihu.com/question/31809713" target="_blank" rel="noopener">https://www.zhihu.com/question/31809713</a></p>
+<p><a href="https://www.zhihu.com/question/66851503" target="_blank" rel="noopener">https://www.zhihu.com/question/66851503</a></p>
+<p><a href="https://juejin.im/post/5affd01551882542c83301da" target="_blank" rel="noopener">https://juejin.im/post/5affd01551882542c83301da</a></p>
+<p><a href="https://www.infoq.cn/article/uDLCPKH4iQb0cR5wGY7f" target="_blank" rel="noopener">https://www.infoq.cn/article/uDLCPKH4iQb0cR5wGY7f</a></p>
+<h2 id="三、感受"><a href="#三、感受" class="headerlink" title="三、感受"></a>三、感受</h2><p>diff算法算出来 O(n<sup>3</sup>) 真的看不懂，别人花了好几十年优化成 O(n<sup>3</sup>) ，待我水平够了再回看。这次重新复习 VDOM 让我对之前看Vue.js源码的理解有了更多更深的理解。</p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/JavaScript/">JavaScript</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/05/%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">异步请求</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/04/%E5%B8%B8%E8%A7%81Web%E6%94%BB%E5%87%BB%E5%92%8C%E9%98%B2%E8%8C%83/">
+                        <span class="hidden-mobile">常见Web攻击和防范</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
