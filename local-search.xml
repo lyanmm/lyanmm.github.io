@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>原型链</title>
+    <link href="/2020/07/15/%E5%8E%9F%E5%9E%8B%E9%93%BE/"/>
+    <url>/2020/07/15/%E5%8E%9F%E5%9E%8B%E9%93%BE/</url>
+    
+    <content type="html"><![CDATA[<h1 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h1><h2 id="一、创建对象的方法"><a href="#一、创建对象的方法" class="headerlink" title="一、创建对象的方法"></a>一、创建对象的方法</h2><pre><code class="hljs js"><span class="hljs-comment">//1.字面量</span><span class="hljs-keyword">var</span> obj1 = &#123;<span class="hljs-attr">name</span>: <span class="hljs-string">'solo obj1'</span>&#125;;<span class="hljs-comment">//2.new Object</span><span class="hljs-keyword">var</span> obj2 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Object</span>(&#123;<span class="hljs-attr">name</span>: <span class="hljs-string">'solo obj2'</span>&#125;)<span class="hljs-comment">//3.构造函数创建</span><span class="hljs-keyword">var</span> M = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name</span>)</span>&#123;<span class="hljs-keyword">this</span>.name = name;&#125;<span class="hljs-keyword">var</span> obj3 = <span class="hljs-keyword">new</span> M(<span class="hljs-string">'solo obj3'</span>);<span class="hljs-comment">//4.Object.create</span><span class="hljs-keyword">var</span> p = &#123;<span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>&#125;;<span class="hljs-keyword">var</span> obj4 = <span class="hljs-built_in">Object</span>.create(p);</code></pre><h2 id="二、原型、构造函数、实例、原型链的关系"><a href="#二、原型、构造函数、实例、原型链的关系" class="headerlink" title="二、原型、构造函数、实例、原型链的关系"></a>二、原型、构造函数、实例、原型链的关系</h2><img src="https://i.loli.net/2020/07/15/84kOSeHWFVsb1iC.png" srcset="/img/loading.gif" alt="img" style="zoom: 50%;" /><h2 id="三、instanceof-的原理"><a href="#三、instanceof-的原理" class="headerlink" title="三、instanceof 的原理"></a>三、instanceof 的原理</h2><p>原理：判断实例对象的 __proto__是否与构造函数的 prototype 指向同一个引用。</p><p>作用：判断一个引用类型是否属于某构造函数；在继承关系中用来判断一个实例是否属于它的父类型。</p><p>所以只要在实例对象的原型链上的构造函数，instaceof 都会返回 true，如果想准确的判断构造函数究竟是哪个，可以用 constructor。</p><h2 id="四、instanceof-和-typeof-的区别"><a href="#四、instanceof-和-typeof-的区别" class="headerlink" title="四、instanceof 和 typeof 的区别"></a>四、instanceof 和 typeof 的区别</h2><p>typeof 对于基本数据类型（null, undefined, string, number, boolean, symbol），除了 null 都会返回正确的类型。null 会返回 object。typeof 对于对象类型，除了函数会返回 function，其他的都返回 object。</p><p>如果我们想获得一个变量的正确类型，可以通过 Object.prototype.toString.call(xx)。这样我们就可以获得类似 [object Type] 的字符串。</p><p>用 void 0 可以安全的获得 undefined 来判断一个变量是不是 undefined 。</p><h2 id="五、new关键字"><a href="#五、new关键字" class="headerlink" title="五、new关键字"></a>五、new关键字</h2><p>概念：创建一个用户定义的对象类型的实例或具有构造函数的内置对象的实例。</p><p>过程：</p><ol><li>创建一个空的简单JavaScript对象（即<code>{}</code>）；</li><li>链接该对象（即设置该对象的构造函数）到另一个对象 ；</li><li>将步骤1新创建的对象作为<code>this</code>的上下文 ；</li><li>如果该函数没有返回对象，则返回<code>this</code>。</li></ol><p>创建一个用户自定义的对象需要两步：</p><ol><li>通过编写函数来定义对象类型。</li><li>通过 <code>new</code> 来创建对象实例。</li></ol><p>创建一个对象类型，需要创建一个指定其名称和属性的函数；对象的属性可以指向其他对象，看下面的例子：</p><p>当代码 <code>new Foo(...)</code> 执行时，会发生以下事情：</p><ol><li>一个继承自 <code>Foo.prototype</code> 的新对象被创建。</li><li>使用指定的参数调用构造函数 <code>Foo</code>，并将 <code>this</code> 绑定到新创建的对象。<code>new Foo</code> 等同于 <code>new Foo()</code>，也就是没有指定参数列表，<code>Foo</code>不带任何参数调用的情况。</li><li>由构造函数返回的对象就是 <code>new</code> 表达式的结果。如果构造函数没有显式返回一个对象，则使用步骤1创建的对象。（一般情况下，构造函数不返回值，但是用户可以选择主动返回对象，来覆盖正常的对象创建步骤）</li></ol><h2 id="六、参考"><a href="#六、参考" class="headerlink" title="六、参考"></a>六、参考</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>JavaScript</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>DOM事件</title>
     <link href="/2020/07/13/domevent/"/>
     <url>/2020/07/13/domevent/</url>
