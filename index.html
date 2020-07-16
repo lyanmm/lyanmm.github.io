@@ -158,6 +158,39 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2020/07/16/inheritscopeclosure/">继承、作用域和闭包</a>
+
+      <a href="/2020/07/16/inheritscopeclosure/" class="index-excerpt">
+        
+        
+          
+        
+        <div>继承、作用域和闭包一、继承ES5 的继承，实质是先创造子类的实例对象 this ，然后再将父类的方法添加到this上面（ Parent.apply(this) ）。ES6 的继承机制完全不同，实质是先将父类实例对象的属性和方法，加到 this 上面（所以必须先调用 super 方法），然后再用子类的构造函数修改 this 。所以在子类的构造函数中，只有调用 super 之后，才可以使用 this </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-07-16
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/JavaScript/">JavaScript</a>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a class="index-header" href="/2020/07/15/%E5%8E%9F%E5%9E%8B%E9%93%BE/">原型链</a>
 
       <a href="/2020/07/15/%E5%8E%9F%E5%9E%8B%E9%93%BE/" class="index-excerpt">
@@ -496,42 +529,6 @@ Promise对象有三种状态</div>
             <i class="iconfont icon-category"></i>
             
               <a href="/categories/JavaScript/">JavaScript</a>
-            
-          </div>
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2020/07/04/%E5%B8%B8%E8%A7%81Web%E6%94%BB%E5%87%BB%E5%92%8C%E9%98%B2%E8%8C%83/">常见Web攻击和防范</a>
-
-      <a href="/2020/07/04/%E5%B8%B8%E8%A7%81Web%E6%94%BB%E5%87%BB%E5%92%8C%E9%98%B2%E8%8C%83/" class="index-excerpt">
-        
-        
-          
-        
-        <div>常见Web攻击和防范一、XSS 攻击和防范1. 概念跨站脚本攻击（Cross-site scripting，XSS）是一种安全漏洞，攻击者可以利用这种漏洞注入恶意代码，在用户浏览器上运行，从而盗取用户的信息如 cookie 等。
-2. 类型
-存储型：恶意代码提交到了网站的数据库中，当用户请求数据的时候，服务器将其拼接为 HTML 后返回给了用户，从而导致了恶意代码的执行。
-反射型：攻击者构建了特殊</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-07-04
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Other/">Other</a>
             
           </div>
         
