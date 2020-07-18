@@ -190,11 +190,10 @@
 </li>
 <li><p>渲染</p>
 <ol>
-<li>根据 HTML文件构建 DOM Tree，根据 CSS 文件构建 CSSOM ；</li>
-<li>根据 DOM Tree 和 CSSOM 构建Render Tree；</li>
-<li>遇到 &lt;script&gt; 就加载并执行 JS 代码，否则会造成页面的渲染的阻塞；</li>
-<li>Render Tree 渲染结束；</li>
-<li>断开 TCP 连接。</li>
+<li>解析 HTML 代码构建 DOM 树，解析 CSS 代码构建 CSSOM 规则树；</li>
+<li>根据 DOM 和 CSSOM 构建 Render Tree  ；</li>
+<li>利用 Render Tree 对页面进行布局和绘制；</li>
+<li>在解析 HTML 代码时，遇到&lt;script&gt; 浏览器会先下载和构建CSSOM，然后执行脚本，最后才是继续构建DOM。</li>
 </ol>
 </li>
 </ul>
