@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Lyanm Zhong">
   <meta name="keywords" content="">
-  <title>Webpack简要配置 - Lyanm</title>
+  <title>从零配置简单Webpack - Lyanm</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -134,7 +134,7 @@
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
-                Webpack简要配置
+                从零配置简单Webpack
               
             </span>
 
@@ -179,7 +179,343 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h1 id="Webpack简要配置"><a href="#Webpack简要配置" class="headerlink" title="Webpack简要配置"></a>Webpack简要配置</h1>
+              <h1 id="从零配置简单Webpack"><a href="#从零配置简单Webpack" class="headerlink" title="从零配置简单Webpack"></a>从零配置简单Webpack</h1><h2 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h2><pre><code class="hljs shell">npm init -y
+npm install webpack webpack-cli --save-dev</code></pre>
+
+<p>注意：npm初始化后的 package.json 里的 name 属性不能与 webpack 同名。</p>
+<h2 id="二、创建配置文件"><a href="#二、创建配置文件" class="headerlink" title="二、创建配置文件"></a>二、创建配置文件</h2><p>一般有两种方法：</p>
+<ol>
+<li>基础配置文件 + 开发环境配置文件 + 生产环境配置文件</li>
+<li>开发环境配置文件 + 生产环境配置文件</li>
+</ol>
+<p>这里用第二种：根目录下创建 webpack.dev.js 和 webpack.prod.js 两个文件。</p>
+<p>然后在 package.json 里添加两个脚本：</p>
+<pre><code class="hljs json">"build": "webpack --config webpack.prod.js",
+"dev": "webpack-dev-server --config webpack.dev.js"</code></pre>
+
+<h2 id="三、安装常用loader和plugin"><a href="#三、安装常用loader和plugin" class="headerlink" title="三、安装常用loader和plugin"></a>三、安装常用loader和plugin</h2><p>安装：</p>
+<pre><code class="hljs shell">npm install webpack-dev-server --save-dev
+npm install html-webpack-plugin --save-dev
+npm install css-loader --save-dev
+npm install style-loader --save-dev
+npm install sass-loader node-sass --save-dev
+npm install clean-webpack-plugin --save-dev
+npm install @babel/core @babel/preset-env babel-loader --save-dev
+npm install file-loader --save-dev
+npm install url-loader --save-dev
+npm install html-loader --save-dev
+npm install mini-css-extract-plugin --save-dev
+npm install postcss-preset-env postcss-loader --save-dev
+npm install optimize-css-assets-webpack-plugin --save-dev
+npm install @babel/polyfill --save-dev
+npm install core-js --save-dev</code></pre>
+
+<p>作用：</p>
+<ul>
+<li>webpack-dev-server：开启调试的服务器。</li>
+<li>html-webpack-plugin：处理html。</li>
+<li>css-loader：处理css文件。</li>
+<li>style-loader：将处理好的css代码引入到style标签内。</li>
+<li>sass-loader node-sass：处理sass。</li>
+<li>clean-webpack-plugin：在重新生成打包文件夹前将dist文件夹删除。</li>
+<li>@babel/core @babel/preset-env babel-loader：大部分 es6–&gt;es5，promise 等无法转换。</li>
+<li>file-loader：处理各类资源文件（字体图标、视频等）。</li>
+<li>url-loader：处理（图片）路径。</li>
+<li>html-loader：处理html内的img标签。</li>
+<li>mini-css-extract-plugin：将css代码从bundle.js中分离成单个文件。</li>
+<li>postcss-preset-env postcss-loader：前者处理css最新语法的兼容性问题，注意在package.json配置browserslist；后者是处理css的工具集，看具体配置了什么。</li>
+<li>optimize-css-assets-webpack-plugin：压缩css。</li>
+<li>@babel/polyfill：谨慎引入polyfill，会导致打包后的js文件变巨大，用法是在入口文件引入import ‘@babel/polyfill’，配置文件无需更改。</li>
+<li>core-js：按需处理js兼容性问题，就不再需要 @babel/polyfill 了。</li>
+</ul>
+<h2 id="四、附录"><a href="#四、附录" class="headerlink" title="四、附录"></a>四、附录</h2><pre><code class="hljs json"><span class="hljs-comment">// package.json</span>
+"browserslist":&#123;
+    "development":[
+      "last 1 chrome version",
+      "last 1 firefox version",
+      <span class="hljs-string">"last 1 safari version"</span>
+    ],
+    "production":[
+      "&gt;0.2%",
+      "not dead",
+      <span class="hljs-string">"not op_mini all"</span>
+    ]
+&#125;
+<span class="hljs-comment">// 测试browserlist里的开发环境，需要给Node.js定环境变量，</span>
+<span class="hljs-comment">// 而不是修改webpack的开发模式（默认为生产环境）。</span>
+process.env.NODE_ENV = 'development'</code></pre>
+
+<pre><code class="hljs js"><span class="hljs-comment">// webpack.dev.js</span>
+<span class="hljs-keyword">const</span> &#123; resolve &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+<span class="hljs-keyword">const</span> HtmlWebpackPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'html-webpack-plugin'</span>)
+<span class="hljs-keyword">const</span> MiniCssExtractPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mini-css-extract-plugin'</span>)
+<span class="hljs-keyword">const</span> OptimizeCssAssetsPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'optimize-css-assets-webpack-plugin'</span>)
+<span class="hljs-built_in">module</span>.exports = &#123;
+  mode: <span class="hljs-string">'development'</span>,
+  entry: resolve(__dirname, <span class="hljs-string">'src'</span>, <span class="hljs-string">'index.js'</span>),
+  output: &#123;
+    filename: <span class="hljs-string">'bundle.js'</span>,
+    path: resolve(__dirname, <span class="hljs-string">'dist'</span>)
+  &#125;,
+  <span class="hljs-built_in">module</span>: &#123;
+    rules: [
+      &#123;
+        test: <span class="hljs-regexp">/\.css$/</span>,
+        use: [
+          MiniCssExtractPlugin.loader, 
+          <span class="hljs-string">'css-loader'</span>,
+          &#123;
+            loader: <span class="hljs-string">'postcss-loader'</span>,
+            options: &#123;
+              ident: <span class="hljs-string">'postcss'</span>, <span class="hljs-comment">// webpack要求要给的唯一标识</span>
+              plugins:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>[
+                <span class="hljs-built_in">require</span>(<span class="hljs-string">'postcss-preset-env'</span>)()
+              ]
+            &#125;
+          &#125;
+        ]
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.scss$/</span>,
+        use: [&#123;
+          loader: MiniCssExtractPlugin.loader <span class="hljs-comment">// 将 JS 字符串生成为 style 节点</span>
+        &#125;, &#123;
+          loader: <span class="hljs-string">"css-loader"</span> <span class="hljs-comment">// 将 CSS 转化成 CommonJS 模块</span>
+        &#125;, &#123;
+          loader: <span class="hljs-string">"sass-loader"</span> <span class="hljs-comment">// 将 Sass 编译成 CSS</span>
+        &#125;]
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.js$/</span>,
+        loader: [<span class="hljs-string">'babel-loader'</span>],
+        include: resolve(__dirname, <span class="hljs-string">'src'</span>),
+        exclude: <span class="hljs-regexp">/node_modules/</span>,
+        options:&#123;
+          presets:[
+            <span class="hljs-string">'@babel/preset-env'</span>,
+            &#123;
+              <span class="hljs-comment">// 按需加载</span>
+              useBuiltIns: <span class="hljs-string">'usage'</span>,
+              <span class="hljs-comment">// 指定core-js版本</span>
+              corejs:&#123;
+                version: <span class="hljs-number">3</span>
+              &#125;,
+              <span class="hljs-comment">// 指定兼容性做到哪个版本浏览器</span>
+              target:&#123;
+                chrome: <span class="hljs-string">'60'</span>,
+                firefox: <span class="hljs-string">'60'</span>,
+                ie: <span class="hljs-string">'9'</span>,
+                safari: <span class="hljs-string">'10'</span>,
+                edge: <span class="hljs-string">'17'</span>
+              &#125;
+            &#125;
+          ]
+        &#125;
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.(png|jpg|gif)$/</span>,
+        use: [
+          &#123;
+            loader: <span class="hljs-string">'url-loader'</span>,
+            options: &#123;
+              name: <span class="hljs-string">'[hash:5].[ext]'</span>,
+              limit: <span class="hljs-number">8192</span>,
+              <span class="hljs-comment">// 默认情况下url-loader用es6的方法引入，跟html-loader配合时会出错，所以要设置为false</span>
+              esModule: <span class="hljs-literal">false</span>
+            &#125;
+          &#125;
+        ]
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.(html)$/</span>,
+        use: &#123;
+          loader: <span class="hljs-string">'html-loader'</span>
+        &#125;
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.(eot|svg|woff|woff2|ttf|mp3|mp4|avi)$/</span>,
+        <span class="hljs-comment">// 或者排除html/css/js/scss等其他处理过的</span>
+        <span class="hljs-comment">// exclude: /\.(html|css|js|scss)$/,</span>
+        loader: <span class="hljs-string">' file-loader'</span>,
+        options: &#123;
+          name: <span class="hljs-string">'[hash:5].[ext]'</span>
+        &#125;
+      &#125;
+    ]
+  &#125;,
+  plugins: [
+    <span class="hljs-keyword">new</span> HtmlWebpackPlugin(&#123;
+      <span class="hljs-comment">// 模板</span>
+      template: resolve(__dirname, <span class="hljs-string">'src'</span>, <span class="hljs-string">'index.html'</span>),
+      <span class="hljs-comment">// 输出文件名</span>
+      filename: <span class="hljs-string">'index.html'</span>
+    &#125;),
+    <span class="hljs-comment">// 使用MiniCssExtractPlugin就要把所有style-loader换成MiniCssExtractPlugin.loader</span>
+    <span class="hljs-keyword">new</span> MiniCssExtractPlugin(&#123;
+      <span class="hljs-comment">// filename: 'css/main.css'</span>
+    &#125;),
+    <span class="hljs-keyword">new</span> OptimizeCssAssetsPlugin()
+  ],
+  devServer: &#123;
+    port: <span class="hljs-number">3000</span>,
+    contentBase: resolve(__dirname, <span class="hljs-string">'dist'</span>),
+    open: <span class="hljs-literal">true</span>,
+    compress: <span class="hljs-literal">true</span>,
+    hot: <span class="hljs-literal">true</span>
+  &#125;,
+  <span class="hljs-comment">// 方便调试</span>
+  devtool: <span class="hljs-string">'cheap-module-eval-source-map'</span>
+&#125;</code></pre>
+
+<pre><code class="hljs js"><span class="hljs-keyword">const</span> &#123; resolve &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+<span class="hljs-keyword">const</span> HtmlWebpackPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'html-webpack-plugin'</span>)
+<span class="hljs-keyword">const</span> MiniCssExtractPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mini-css-extract-plugin'</span>)
+<span class="hljs-keyword">const</span> OptimizeCssAssetsPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'optimize-css-assets-webpack-plugin'</span>)
+
+<span class="hljs-built_in">module</span>.exports = &#123;
+  mode: <span class="hljs-string">'production'</span>,
+  entry: resolve(__dirname, <span class="hljs-string">'src'</span>, <span class="hljs-string">'index.js'</span>),
+  output: &#123;
+    filename: <span class="hljs-string">'bundle.js'</span>,
+    path: resolve(__dirname, <span class="hljs-string">'dist'</span>)
+  &#125;,
+  <span class="hljs-built_in">module</span>: &#123;
+    rules: [
+      &#123;
+        test: <span class="hljs-regexp">/\.css$/</span>,
+        use: [
+          MiniCssExtractPlugin.loader,
+          <span class="hljs-string">'css-loader'</span>,
+          &#123;
+            loader: <span class="hljs-string">'postcss-loader'</span>,
+            options: &#123;
+              ident: <span class="hljs-string">'postcss'</span>, <span class="hljs-comment">// webpack要求要给的唯一标识</span>
+              plugins:<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>[
+                <span class="hljs-built_in">require</span>(<span class="hljs-string">'postcss-preset-env'</span>)()
+              ]
+            &#125;
+          &#125;
+        ]
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.scss$/</span>,
+        use: [&#123;
+          loader: MiniCssExtractPlugin.loader <span class="hljs-comment">// 将 JS 字符串生成为 style 节点</span>
+        &#125;, &#123;
+          loader: <span class="hljs-string">"css-loader"</span> <span class="hljs-comment">// 将 CSS 转化成 CommonJS 模块</span>
+        &#125;, &#123;
+          loader: <span class="hljs-string">"sass-loader"</span> <span class="hljs-comment">// 将 Sass 编译成 CSS</span>
+        &#125;]
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.js$/</span>,
+        loader: [<span class="hljs-string">'babel-loader'</span>],
+        include: resolve(__dirname, <span class="hljs-string">'src'</span>),
+        exclude: <span class="hljs-regexp">/node_modules/</span>,
+        options:&#123;
+          presets:[
+            <span class="hljs-string">'@babel/preset-env'</span>,
+            &#123;
+              <span class="hljs-comment">// 按需加载</span>
+              useBuiltIns: <span class="hljs-string">'usage'</span>,
+              <span class="hljs-comment">// 指定core-js版本</span>
+              corejs:&#123;
+                version: <span class="hljs-number">3</span>
+              &#125;,
+              <span class="hljs-comment">// 指定兼容性做到哪个版本浏览器</span>
+              target:&#123;
+                chrome: <span class="hljs-string">'60'</span>,
+                firefox: <span class="hljs-string">'60'</span>,
+                ie: <span class="hljs-string">'9'</span>,
+                safari: <span class="hljs-string">'10'</span>,
+                edge: <span class="hljs-string">'17'</span>
+              &#125;
+            &#125;
+          ]
+        &#125;
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.(png|jpg|gif)$/</span>,
+        use: [
+          &#123;
+            loader: <span class="hljs-string">'url-loader'</span>,
+            options: &#123;
+              name: <span class="hljs-string">'[hash:5].[ext]'</span>,
+              limit: <span class="hljs-number">8192</span>,
+              <span class="hljs-comment">// 默认情况下url-loader用es6的方法引入，跟html-loader配合时会出错，所以要设置为false</span>
+              esModule: <span class="hljs-literal">false</span>
+            &#125;
+          &#125;
+        ]
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.(html)$/</span>,
+        use: &#123;
+          loader: <span class="hljs-string">'html-loader'</span>
+        &#125;
+      &#125;,
+      &#123;
+        test: <span class="hljs-regexp">/\.(eot|svg|woff|woff2|ttf|mp3|mp4|avi)$/</span>,
+        <span class="hljs-comment">// 或者排除html/css/js/scss等其他处理过的</span>
+        <span class="hljs-comment">// exclude: /\.(html|css|js|scss)$/,</span>
+        loader: <span class="hljs-string">' file-loader'</span>,
+        options: &#123;
+          name: <span class="hljs-string">'[hash:5].[ext]'</span>
+        &#125;
+      &#125;
+    ]
+  &#125;,
+  plugins: [
+    <span class="hljs-keyword">new</span> HtmlWebpackPlugin(&#123;
+      <span class="hljs-comment">// 模板</span>
+      template: resolve(__dirname, <span class="hljs-string">'src'</span>, <span class="hljs-string">'index.html'</span>),
+      <span class="hljs-comment">// 输出文件名</span>
+      filename: <span class="hljs-string">'index.html'</span>,
+      <span class="hljs-comment">// 压缩HTML</span>
+      minify:&#123;
+        collapseWhitespace: <span class="hljs-literal">true</span>,
+        removeComments: <span class="hljs-literal">true</span>
+      &#125;
+    &#125;),
+    <span class="hljs-comment">// 使用MiniCssExtractPlugin就要把所有style-loader换成MiniCssExtractPlugin.loader</span>
+    <span class="hljs-keyword">new</span> MiniCssExtractPlugin(&#123;
+      <span class="hljs-comment">// filename: 'css/main.css'</span>
+    &#125;),
+    <span class="hljs-keyword">new</span> OptimizeCssAssetsPlugin()
+  ],
+  <span class="hljs-comment">// 分割代码，像vue的脚手架生成的js文件一样有多个，也即多个chunk。并且会分析有无相同的文件。</span>
+  optimization: &#123;
+    splitChunks: &#123;
+      chunks: <span class="hljs-string">'all'</span>
+    &#125;
+  &#125;
+&#125;</code></pre>
+
+<p>开发环境和生产环境的配置，按实际情况更改。</p>
+<p>例如配置eslint，上面无配置，一般ide就能实现，这里仅作补充。</p>
+<pre><code class="hljs shell">npm install eslint-config-airbnb-base eslint-plugin-import eslint --save-dev</code></pre>
+
+<pre><code class="hljs js"><span class="hljs-comment">// webpack配置文件</span>
+&#123;
+  test: <span class="hljs-regexp">/\.js$/</span>,
+  exclude: <span class="hljs-regexp">/node_modules/</span>,
+  loader: <span class="hljs-string">'eslint-loader'</span>,
+  options: &#123;
+    fix: <span class="hljs-literal">true</span>
+  &#125;
+&#125;</code></pre>
+
+<pre><code class="hljs json"><span class="hljs-comment">// package.json</span>
+"eslintConfig": &#123;
+    "extends": "airbnb-base"
+&#125;</code></pre>
+
+<h2 id="五、参考"><a href="#五、参考" class="headerlink" title="五、参考"></a>五、参考</h2><p><a href="https://www.webpackjs.com/" target="_blank" rel="noopener">https://www.webpackjs.com/</a></p>
+<p><a href="https://juejin.im/post/5b4609f5e51d4519596b66a7" target="_blank" rel="noopener">https://juejin.im/post/5b4609f5e51d4519596b66a7</a></p>
+<p><a href="https://www.npmjs.com/package/postcss-loader" target="_blank" rel="noopener">https://www.npmjs.com/package/postcss-loader</a></p>
+<p><a href="https://www.babeljs.cn/" target="_blank" rel="noopener">https://www.babeljs.cn/</a></p>
+<p><a href="https://www.npmjs.com/package/postcss-preset-env" target="_blank" rel="noopener">https://www.npmjs.com/package/postcss-preset-env</a></p>
+
             </article>
             <hr>
             <div>
