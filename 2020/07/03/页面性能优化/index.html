@@ -221,11 +221,29 @@
 <li><p>SSR ： 可以使用 Nuxt.js 做 SSR</p>
 </li>
 <li><p>懒加载：</p>
+<p>方法一：</p>
 <pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"img"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"preview.png"</span> <span class="hljs-attr">data-realsrc</span>=<span class="hljs-string">"abc.png"</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span>
-<span class="javascript">  <span class="hljs-keyword">let</span> img = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'img'</span>)</span>
-<span class="actionscript">  img.src = img1.getAttribute(<span class="hljs-string">'data-realsrc'</span>)</span>
+<span class="javascript">  <span class="hljs-keyword">var</span> num = <span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">'img'</span>).length;</span>
+<span class="javascript">    <span class="hljs-keyword">var</span> img = <span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">"img"</span>);</span>
+<span class="actionscript">    <span class="hljs-keyword">var</span> n = <span class="hljs-number">0</span>; <span class="hljs-comment">//存储图片加载到的位置，避免每次都从第一张图片开始遍历</span></span>
+<span class="actionscript">    lazyload(); <span class="hljs-comment">//页面载入完毕加载可是区域内的图片</span></span>
+<span class="javascript">    <span class="hljs-built_in">window</span>.onscroll = lazyload;</span>
+<span class="actionscript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">lazyload</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">//监听页面滚动事件</span></span>
+<span class="javascript">        <span class="hljs-keyword">var</span> seeHeight = <span class="hljs-built_in">document</span>.documentElement.clientHeight; <span class="hljs-comment">//可见区域高度</span></span>
+<span class="javascript">        <span class="hljs-keyword">var</span> scrollTop = <span class="hljs-built_in">document</span>.documentElement.scrollTop || <span class="hljs-built_in">document</span>.body.scrollTop; <span class="hljs-comment">//滚动条距离顶部高度</span></span>
+<span class="actionscript">        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = n; i &lt; num; i++) &#123;</span>
+            if (img[i].offsetTop &lt; seeHeight + scrollTop) &#123;
+<span class="actionscript">                <span class="hljs-keyword">if</span> (img[i].getAttribute(<span class="hljs-string">"src"</span>) == <span class="hljs-string">"default.jpg"</span>) &#123;</span>
+<span class="actionscript">                    img[i].src = img[i].getAttribute(<span class="hljs-string">"data-src"</span>);</span>
+                &#125;
+                n = i + 1;
+            &#125;
+        &#125;
+    &#125;
 <span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+
+<p>方法二：<a href="https://juejin.im/post/5bbc60e8f265da0af609cd04" target="_blank" rel="noopener">https://juejin.im/post/5bbc60e8f265da0af609cd04</a></p>
 </li>
 <li><p>节流（throttle）：规定一个单位时间，在这个单位时间内，只能有一次触发事件的回调函数执行，如果在同一个单位时间内某事件被触发多次，只有一次能生效。节流可以使用在 scroll 函数的事件监听上，通过事件节流来降低事件调用的频率。</p>
 <pre><code class="hljs js"><span class="hljs-comment">// 函数节流的实现;</span>
@@ -304,6 +322,8 @@ input1.addEventListener(<span class="hljs-string">'keyup'</span>, debounce(<span
 </li>
 <li><p>pr属性：</p>
 <p>dns-prefetch，preconnect，prefetch和prerender都支持一个pr属性（0.0到1.0范围的值），让浏览器能够判断优先加载哪些资源。浏览器内部是有可用的连接池的，资源紧张的情况下只能加载优先级更高的资源。</p>
+</li>
+<li><p>浏览器缓存：<a href="https://lyanmm.github.io/2020/07/20/浏览器缓存/" target="_blank" rel="noopener">链接</a></p>
 </li>
 </ol>
 <p>参考：</p>
