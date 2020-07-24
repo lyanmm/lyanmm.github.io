@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lyanm Zhong">
+  <meta name="keywords" content="">
+  <title>数组等常用方法整理 - Lyanm</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lyanm's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+                数组等常用方法整理
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-07-23 15:59">
+      July 23, 2020 pm
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="一、数组"><a href="#一、数组" class="headerlink" title="一、数组"></a>一、数组</h1><h2 id="1、splice"><a href="#1、splice" class="headerlink" title="1、splice()"></a>1、splice()</h2><ol>
+<li><p>定义：</p>
+<p>通过<u>删除</u>或<u>替换</u>现有元素或者<u>原地添加</u>新的元素来修改原数组。由被删除的元素组成的一个数组。</p>
+</li>
+<li><p>语法：</p>
+<pre><code class="hljs js">array.splice(start[, deleteCount[, item1[, item2[, ...]]]])</code></pre>
+</li>
+<li><p>示例：</p>
+<pre><code class="hljs js"><span class="hljs-keyword">var</span> myFish = [<span class="hljs-string">"angel"</span>, <span class="hljs-string">"clown"</span>, <span class="hljs-string">"mandarin"</span>, <span class="hljs-string">"sturgeon"</span>];
+<span class="hljs-keyword">var</span> removed = myFish.splice(<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"drum"</span>);
+<span class="hljs-comment">// 运算后的 myFish: ["angel", "clown", "drum", "mandarin", "sturgeon"]</span>
+<span class="hljs-comment">// 被删除的元素: [], 没有元素被删除</span>
+<span class="hljs-keyword">var</span> myFish = [<span class="hljs-string">'angel'</span>, <span class="hljs-string">'clown'</span>, <span class="hljs-string">'drum'</span>, <span class="hljs-string">'mandarin'</span>, <span class="hljs-string">'sturgeon'</span>];
+<span class="hljs-keyword">var</span> removed = myFish.splice(<span class="hljs-number">3</span>, <span class="hljs-number">1</span>);
+<span class="hljs-comment">// 运算后的 myFish: ["angel", "clown", "drum", "sturgeon"]</span>
+<span class="hljs-comment">// 被删除的元素: ["mandarin"]</span></code></pre>
+</li>
+<li><p>参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/splice" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/splice</a></p>
+</li>
+</ol>
+<h2 id="2、slice"><a href="#2、slice" class="headerlink" title="2、slice()"></a>2、slice()</h2><ol>
+<li><p>定义：返回一个新数组，由 begin 和 end 决定的原数组的浅拷贝（包括 begin，不包括end）。原始数组不会被改变。</p>
+</li>
+<li><p>语法：</p>
+<pre><code class="hljs js">arr.slice([begin[, end]])</code></pre>
+</li>
+<li><p>示例：</p>
+<pre><code class="hljs js"><span class="hljs-keyword">var</span> fruits = [<span class="hljs-string">'Banana'</span>, <span class="hljs-string">'Orange'</span>, <span class="hljs-string">'Lemon'</span>, <span class="hljs-string">'Apple'</span>, <span class="hljs-string">'Mango'</span>];
+<span class="hljs-keyword">var</span> citrus = fruits.slice(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>);
+<span class="hljs-comment">// citrus contains ['Orange','Lemon']</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">list</span>(<span class="hljs-params"></span>) </span>&#123;
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>);
+&#125;
+<span class="hljs-keyword">var</span> list1 = list(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>); <span class="hljs-comment">// [1, 2, 3]</span>
+<span class="hljs-comment">// 将一个类数组对象/集合转换成一个新数组。</span></code></pre>
+
+</li>
+</ol>
+<h2 id="3、indexOf"><a href="#3、indexOf" class="headerlink" title="3、indexOf()"></a>3、indexOf()</h2><ol>
+<li><p>定义：返回在数组中可以找到一个给定元素的第一个索引，如果不存在，则返回-1。</p>
+</li>
+<li><p>语法：</p>
+<pre><code class="hljs js">arr.indexOf(searchElement[, fromIndex])</code></pre>
+</li>
+<li><p>示例：</p>
+<pre><code class="hljs js"><span class="hljs-comment">// 数组去重</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unique</span>(<span class="hljs-params">arr</span>) </span>&#123;
+  <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">Array</span>.isArray(arr)) &#123;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'type error!'</span>)
+    <span class="hljs-keyword">return</span>
+  &#125;
+  <span class="hljs-keyword">var</span> array = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; arr.length; i++) &#123;
+    <span class="hljs-keyword">if</span> (array.indexOf(arr[i]) === <span class="hljs-number">-1</span>) &#123;
+      array.push(arr[i])
+    &#125;
+  &#125;
+  <span class="hljs-keyword">return</span> array;
+&#125;</code></pre>
+
+</li>
+</ol>
+<h2 id="4、entries-，keys-和-values"><a href="#4、entries-，keys-和-values" class="headerlink" title="4、entries()，keys() 和 values()"></a>4、entries()，keys() 和 values()</h2><ol>
+<li><p>定义：遍历数组，返回一个遍历器对象，可以用for…of循环进行遍历。keys()是对键名的遍历、values()是对键值的遍历，entries()是对键值对的遍历。</p>
+</li>
+<li><p>语法：</p>
+<pre><code class="hljs isbl"><span class="hljs-variable">arr.entries</span>()/<span class="hljs-function"><span class="hljs-title">keys</span>()/<span class="hljs-title">values</span>()</span></code></pre>
+</li>
+<li><p>示例：</p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> index <span class="hljs-keyword">of</span> [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>].keys()) &#123;
+  <span class="hljs-built_in">console</span>.log(index);
+&#125;
+<span class="hljs-comment">// 0</span>
+<span class="hljs-comment">// 1</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> elem <span class="hljs-keyword">of</span> [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>].values()) &#123;
+  <span class="hljs-built_in">console</span>.log(elem);
+&#125;
+<span class="hljs-comment">// 'a'</span>
+<span class="hljs-comment">// 'b'</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> [index, elem] <span class="hljs-keyword">of</span> [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>].entries()) &#123;
+  <span class="hljs-built_in">console</span>.log(index, elem);
+&#125;
+<span class="hljs-comment">// 0 "a"</span>
+<span class="hljs-comment">// 1 "b"</span>
+<span class="hljs-comment">// 使用遍历器对象上的next()</span>
+<span class="hljs-keyword">let</span> letter = [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>];
+<span class="hljs-keyword">let</span> entries = letter.entries();
+<span class="hljs-built_in">console</span>.log(entries.next().value); <span class="hljs-comment">// [0, 'a']</span>
+<span class="hljs-built_in">console</span>.log(entries.next().value); <span class="hljs-comment">// [1, 'b']</span>
+<span class="hljs-built_in">console</span>.log(entries.next().value); <span class="hljs-comment">// [2, 'c']</span></code></pre>
+
+</li>
+</ol>
+<h2 id="5、flat"><a href="#5、flat" class="headerlink" title="5、flat()"></a>5、flat()</h2><ol>
+<li><p>定义：按照一个可指定的深度（默认为1）递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。</p>
+</li>
+<li><p>语法：</p>
+<pre><code class="hljs js"><span class="hljs-keyword">var</span> newArray = arr.flat([depth])</code></pre>
+</li>
+<li><p>示例：</p>
+<pre><code class="hljs js"><span class="hljs-keyword">var</span> arr2 = [<span class="hljs-number">1</span>, ,<span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>]]];
+arr2.flat();
+<span class="hljs-comment">// [1, 2, 3, 4, [5, 6]]</span>
+<span class="hljs-keyword">var</span> arr3 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>]]];
+arr3.flat(<span class="hljs-number">2</span>);
+<span class="hljs-comment">// [1, 2, 3, 4, 5, 6]</span>
+<span class="hljs-comment">//使用 Infinity，可展开任意深度的嵌套数组</span>
+<span class="hljs-keyword">var</span> arr4 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, [<span class="hljs-number">9</span>, <span class="hljs-number">10</span>]]]]];
+arr4.flat(<span class="hljs-literal">Infinity</span>);
+<span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span></code></pre>
+
+</li>
+</ol>
+<h1 id="二、Promise"><a href="#二、Promise" class="headerlink" title="二、Promise"></a>二、Promise</h1><h2 id="1、finally"><a href="#1、finally" class="headerlink" title="1、finally()"></a>1、finally()</h2><ol>
+<li><p>定义：不管 Promise 对象最后状态如何，都会执行的操作，即该操作应该是与状态无关的，不依赖于 Promise 的执行结果。</p>
+</li>
+<li><p>语法：</p>
+<pre><code class="hljs js">promise.finally(fn)</code></pre>
+</li>
+<li><p>示例：</p>
+<pre><code class="hljs js">promise
+.then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> &#123;···&#125;)
+.catch(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> &#123;···&#125;)
+.finally(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;···&#125;);</code></pre>
+
+</li>
+</ol>
+<h2 id="2、Promise-all"><a href="#2、Promise-all" class="headerlink" title="2、Promise.all()"></a>2、Promise.all()</h2><ol>
+<li><p>定义：将多个 Promise 实例，包装成一个新的 Promise 实例。当这些实例均为fulfilled时，封装后的实例是fulfilled，其余情况为rejected。</p>
+</li>
+<li><p>语法：传入的参数必须有必须具有 Iterator 接口，数组等。</p>
+<pre><code class="hljs js"><span class="hljs-built_in">Promise</span>.all([Iterator]);</code></pre>
+</li>
+<li><p>示例：</p>
+<pre><code class="hljs js"><span class="hljs-keyword">const</span> p1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;
+  resolve(<span class="hljs-string">'hello'</span>);
+&#125;)
+.then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> result)
+.catch(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> e);
+<span class="hljs-keyword">const</span> p2 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'报错了'</span>);
+&#125;)
+.then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> result)
+.catch(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> e);
+<span class="hljs-built_in">Promise</span>.all([p1, p2])
+.then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(result))
+.catch(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(e));
+<span class="hljs-comment">// ["hello", Error: 报错了]</span>
+<span class="hljs-comment">// 如果作为参数的 Promise 实例，自己定义了catch方法，</span>
+<span class="hljs-comment">// 那么它一旦被rejected，并不会触发Promise.all()的catch方法。</span></code></pre>
+
+</li>
+</ol>
+<h2 id="3、Promise-race"><a href="#3、Promise-race" class="headerlink" title="3、Promise.race()"></a>3、Promise.race()</h2><ol>
+<li><p>定义：将多个 Promise 实例，包装成一个新的 Promise 实例。当这些实例内有一个状态发生改变时，那个率先改变的 Promise 实例的返回值，就传递给封装后实例调用。</p>
+</li>
+<li><p>语法：</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">Promise</span><span class="hljs-selector-class">.race</span>(<span class="hljs-selector-attr">[Iterator]</span>)</code></pre>
+</li>
+<li><p>示例：</p>
+<pre><code class="hljs js"><span class="hljs-keyword">const</span> p = <span class="hljs-built_in">Promise</span>.race([
+  fetch(<span class="hljs-string">'/resource-that-may-take-a-while'</span>),
+  <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">resolve, reject</span>) </span>&#123;
+    setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'request timeout'</span>)), <span class="hljs-number">5000</span>)
+  &#125;)
+]);
+p
+.then(<span class="hljs-built_in">console</span>.log)
+.catch(<span class="hljs-built_in">console</span>.error);
+<span class="hljs-comment">// 如果 5 秒之内fetch方法无法返回结果，</span>
+<span class="hljs-comment">// 变量p的状态就会变为rejected，从而触发catch方法指定的回调函数。</span></code></pre></li>
+</ol>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/JavaScript/">JavaScript</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/20/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/">
+                        <span class="hidden-mobile">浏览器缓存</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
