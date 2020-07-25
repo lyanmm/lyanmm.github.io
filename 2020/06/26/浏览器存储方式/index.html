@@ -189,10 +189,9 @@
 <p>参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Cookies" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Cookies</a></p>
 <h2 id="二、Web-Storage-API"><a href="#二、Web-Storage-API" class="headerlink" title="二、Web Storage API"></a>二、Web Storage API</h2><p>Web Storage 包含如下两种机制：</p>
 <ul>
-<li><p>sessionStorage： 为每一个给定的源（given origin）维持一个独立的存储区域，该存储区域在页面会话期间可用（即只要浏览器处于打开状态，包括页面重新加载和恢复）。</p>
-</li>
-<li><p>localStorage： 同样的功能，但是在浏览器关闭，然后重新打开后数据仍然存在。</p>
-</li>
+<li>sessionStorage： 为每一个给定的源（given origin）维持一个独立的存储区域，该存储区域在页面会话期间可用（即只要浏览器处于打开状态，包括页面重新加载和恢复）。</li>
+<li>localStorage： 同样的功能，但是在浏览器关闭，然后重新打开后数据仍然存在。</li>
+<li>这两个有一点跟Cookie一样，就是针对一个域名，即在同一个域名下，才可以随意存取，在A域名存，B域名下取不出。</li>
 </ul>
 <pre><code class="hljs js"><span class="hljs-comment">// 保存数据</span>
 sessionStorage.setItem(<span class="hljs-string">'key'</span>, <span class="hljs-string">'value'</span>);

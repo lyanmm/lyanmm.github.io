@@ -322,6 +322,7 @@ obj.timeout() <span class="hljs-comment">// obj obj</span></code></pre>
 <span class="hljs-keyword">let</span> p = <span class="hljs-keyword">new</span> Person(<span class="hljs-string">'lll'</span>, <span class="hljs-number">18</span>); <span class="hljs-comment">// Person &#123;name: "lll", age: 18&#125;</span></code></pre>
 
 <p>5）bind\call\apply 指向传入的第一个实参</p>
+<p>bind 方法的返回值是函数，并且需要稍后调用才会执行，而 apply 和 call 则是立即调用。</p>
 <pre><code class="hljs js"><span class="hljs-comment">// 手写bind\call\apply</span>
 <span class="hljs-built_in">Function</span>.prototype.myBind = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>&#123;
   <span class="hljs-keyword">const</span> args = <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>,<span class="hljs-number">1</span>)
