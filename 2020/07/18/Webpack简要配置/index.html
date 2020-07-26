@@ -223,7 +223,7 @@ npm install core-js --save-dev</code></pre>
 <li>url-loader：处理（图片）路径。</li>
 <li>html-loader：处理html内的img标签。</li>
 <li>mini-css-extract-plugin：将css代码从bundle.js中分离成单个文件。</li>
-<li>postcss-preset-env postcss-loader：前者处理css最新语法的兼容性问题，注意在package.json配置browserslist；后者是处理css的工具集，看具体配置了什么。</li>
+<li>postcss-preset-env postcss-loader：前者处理css最新语法的兼容性问题，自动加浏览器内核前缀，注意在package.json配置browserslist；后者是处理css的工具集，看具体配置了什么。</li>
 <li>optimize-css-assets-webpack-plugin：压缩css。</li>
 <li>@babel/polyfill：谨慎引入polyfill，会导致打包后的js文件变巨大，用法是在入口文件引入import ‘@babel/polyfill’，配置文件无需更改。</li>
 <li>core-js：按需处理js兼容性问题，就不再需要 @babel/polyfill 了。</li>

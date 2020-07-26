@@ -179,11 +179,101 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h1 id="移动端适配"><a href="#移动端适配" class="headerlink" title="移动端适配"></a>移动端适配</h1><p>看了很多篇文章，看下来就来来去去几个方法。</p>
+              <h1 id="移动端适配"><a href="#移动端适配" class="headerlink" title="移动端适配"></a>移动端适配</h1><h2 id="一、常用单位"><a href="#一、常用单位" class="headerlink" title="一、常用单位"></a>一、常用单位</h2><ul>
+<li>rem：基于 html 节点的字体大小，浏览器一般默认字体大小为 16px，即 1rem=16px。</li>
+<li>em：基于当前区域内的字体大小，字体大小可从父级继承，也可在子级设定，若父级字体大小12px，则1em=12px。</li>
+<li>vh：viewportHeight，视窗高度，该单位会把视窗宽度划分100份，如果宽为1334px，则1vh=13.34px。</li>
+<li>vw：viewportWidth，其余同vw。</li>
+</ul>
+<h2 id="二、meta标签"><a href="#二、meta标签" class="headerlink" title="二、meta标签"></a>二、meta标签</h2><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"viewport"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"</span>&gt;</span></code></pre>
+
+<img src="https://i.loli.net/2020/07/26/zR9KFNrdMqxlXQD.png" srcset="/img/loading.gif" alt="image-20200726104338071" style="zoom:80%;" />
+
+<p>viewport-fit：部分机型底部存在底部指示条，指示条的操作区域与页面底部存在重合，容易导致用户误操作，因此我们需要针对这些机型进行底部安全区适配。</p>
+<h2 id="三、媒体查询实现响应式布局"><a href="#三、媒体查询实现响应式布局" class="headerlink" title="三、媒体查询实现响应式布局"></a>三、媒体查询实现响应式布局</h2><p>媒体查询：</p>
+<pre><code class="hljs css"><span class="hljs-keyword">@media</span> screen <span class="hljs-keyword">and</span> (<span class="hljs-attribute">max-width:</span> <span class="hljs-number">960px</span>)&#123;
+    <span class="hljs-selector-tag">body</span>&#123;
+      <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#FF6699</span>
+    &#125;
+&#125;
+<span class="hljs-keyword">@media</span> screen <span class="hljs-keyword">and</span> (<span class="hljs-attribute">max-width:</span> <span class="hljs-number">768px</span>)&#123;
+    <span class="hljs-selector-tag">body</span>&#123;
+      <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#00FF66</span>;
+    &#125;
+&#125;
+<span class="hljs-keyword">@media</span> screen <span class="hljs-keyword">and</span> (<span class="hljs-attribute">max-width:</span> <span class="hljs-number">550px</span>)&#123;
+    <span class="hljs-selector-tag">body</span>&#123;
+      <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#6633FF</span>;
+    &#125;
+&#125;
+<span class="hljs-keyword">@media</span> screen <span class="hljs-keyword">and</span> (<span class="hljs-attribute">max-width:</span> <span class="hljs-number">320px</span>)&#123;
+    <span class="hljs-selector-tag">body</span>&#123;
+      <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#FFFF00</span>;
+    &#125;
+&#125;</code></pre>
+
+<p>给不同的屏幕宽度设置不同的样式，用flex、rem作辅助，并且规定好不同尺寸下要展示、隐藏的部分，实现起来非常的麻烦。</p>
+<p>做响应式布局的库有Bootstrap。</p>
+<p>因为rem是基于html标签下的字体大小，可以根据浏览器窗口大小用JS代码调整，存在一定的耦合。</p>
+<p>rem兼容性好。</p>
+<h2 id="四、自适应布局"><a href="#四、自适应布局" class="headerlink" title="四、自适应布局"></a>四、自适应布局</h2><p>主要作用同种终端下差别不太大的页面大小，一般都分别为PC和移动两端作各自的页面开发。</p>
+<p>一般采用vh/vw单位，即使是用rem也是设置好根元素字体大小好，将视窗宽度划分为100份，模拟vh/vw的效果。</p>
+<p>注意使用vh/vw开发的时候可能会出现无法整除的情况，可以辅以一些媒体查询来做好适配。</p>
+<p>具体方法：</p>
 <ol>
-<li>媒体查询实现响应式布局</li>
-<li>rem、em、vh、vw</li>
+<li><p>安装：</p>
+<pre><code class="hljs shell">npm install postcss-px-to-viewport</code></pre>
+</li>
+<li><p>使用：</p>
+<pre><code class="hljs js"><span class="hljs-comment">// Vue项目使用，新建postcss.config.js</span>
+plugins:&#123;
+    <span class="hljs-string">"autoprefixer"</span>:&#123;
+      browsers: [<span class="hljs-string">'last 5 versions'</span>]
+    &#125;,
+    <span class="hljs-string">"postcss-px-to-viewport"</span>:&#123;
+      <span class="hljs-comment">// 设计稿大小为iPhone5的大小</span>
+      viewportWidth: <span class="hljs-number">320</span>,<span class="hljs-comment">//视窗宽度，对应设计稿宽度</span>
+      viewportHeight: <span class="hljs-number">568</span>,<span class="hljs-comment">//视窗高度，对应设计稿高度</span>
+      unitPrecision: <span class="hljs-number">5</span>,<span class="hljs-comment">//指定`px`转换为视窗单位值的小数位数</span>
+      viewportUnit: <span class="hljs-string">'vw'</span>,<span class="hljs-comment">//指定需要转换成的视窗单位</span>
+      <span class="hljs-comment">// selectorBlackList: [],//指定不需要转换的类</span>
+      minPixelValue: <span class="hljs-number">1</span>,<span class="hljs-comment">//小于或等于`1px`不转换为视窗单位</span>
+      mediaQuery: <span class="hljs-literal">false</span>,<span class="hljs-comment">//允许在媒体查询中转换`px`</span>
+    &#125;
+  &#125;
+<span class="hljs-comment">// Webpack</span>
+&#123;
+  loader: <span class="hljs-string">'postcss-loader'</span>,
+    options: &#123;
+    plugins: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> [
+      <span class="hljs-built_in">require</span>(<span class="hljs-string">'autoprefixer'</span>)(&#123;
+        browsers: [<span class="hljs-string">'last 5 versions'</span>]
+      &#125;),
+      <span class="hljs-built_in">require</span>(<span class="hljs-string">'postcss-px-to-viewport'</span>)(&#123;
+        viewportWidth: <span class="hljs-number">375</span>, <span class="hljs-comment">//视口宽度（数字)</span>
+        viewportHeight: <span class="hljs-number">1334</span>, <span class="hljs-comment">//视口高度（数字）</span>
+        unitPrecision: <span class="hljs-number">3</span>, <span class="hljs-comment">//设置的保留小数位数（数字）</span>
+        viewportUnit: <span class="hljs-string">'vw'</span>, <span class="hljs-comment">//设置要转换的单位（字符串）</span>
+        selectorBlackList: [], <span class="hljs-comment">//不需要进行转换的类名（数组）</span>
+        minPixelValue: <span class="hljs-number">1</span>, <span class="hljs-comment">//设置要替换的最小像素值（数字）</span>
+        mediaQuery: <span class="hljs-literal">false</span> <span class="hljs-comment">//允许在媒体查询中转换px（true/false）</span>
+      &#125;)
+    ]
+  &#125;</code></pre>
+
+</li>
 </ol>
+<h2 id="五、预处理器函数转换单位"><a href="#五、预处理器函数转换单位" class="headerlink" title="五、预处理器函数转换单位"></a>五、预处理器函数转换单位</h2><pre><code class="hljs scss"><span class="hljs-keyword">@function</span> pxtorem(<span class="hljs-variable">$px</span>)&#123;  <span class="hljs-comment">//$px为需要转换的字号</span>
+    <span class="hljs-keyword">@return</span> <span class="hljs-variable">$px</span> / <span class="hljs-number">40px</span> * <span class="hljs-number">1rem</span>; <span class="hljs-comment">//40px为根字体大小</span>
+&#125;
+<span class="hljs-keyword">@function</span> pxtovw(<span class="hljs-variable">$px</span>)&#123;  <span class="hljs-comment">//$px为需要转换的字号</span>
+    <span class="hljs-keyword">@return</span> <span class="hljs-variable">$px</span> * (<span class="hljs-number">100</span>/<span class="hljs-number">375</span>) * <span class="hljs-number">1vw</span>;  <span class="hljs-comment">// 375为视口宽度</span>
+&#125;</code></pre>
+
+<h2 id="六、参考"><a href="#六、参考" class="headerlink" title="六、参考"></a>六、参考</h2><p><a href="https://juejin.im/post/5e6121c8e51d4526dc7be724" target="_blank" rel="noopener">https://juejin.im/post/5e6121c8e51d4526dc7be724</a></p>
+<p><a href="https://juejin.im/post/5df59139518825123e7af459" target="_blank" rel="noopener">https://juejin.im/post/5df59139518825123e7af459</a></p>
+<p><a href="https://juejin.im/post/5b5c7e1cf265da0f9f4e7381" target="_blank" rel="noopener">https://juejin.im/post/5b5c7e1cf265da0f9f4e7381</a></p>
+<p><a href="https://juejin.im/post/5cddf289f265da038f77696c" target="_blank" rel="noopener">https://juejin.im/post/5cddf289f265da038f77696c</a></p>
 
             </article>
             <hr>
@@ -202,6 +292,29 @@
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
               
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/23/%E6%95%B0%E7%BB%84%E7%AD%89%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数组等常用方法整理</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/20/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/">
+                        <span class="hidden-mobile">浏览器缓存</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
               
             </div>
 
